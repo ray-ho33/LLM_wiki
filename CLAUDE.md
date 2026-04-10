@@ -38,6 +38,16 @@ LLM_wiki/
 - `output/` 는 **LLM이 채운 양식 결과물**을 저장한다.
 - 사용자는 소스를 `raw/`에, 양식을 `templates/`에 넣고, 질문을 하고, 방향을 잡는다. LLM이 나머지를 한다.
 
+### Obsidian 연동
+
+- 이 디렉토리는 Obsidian vault로도 사용된다.
+- `wiki/` 페이지 작성 시 Obsidian 호환성을 유지한다:
+  - 내부 링크는 `[[페이지명]]` 형식
+  - YAML frontmatter 필수
+  - 마크다운 표준 문법 사용
+- 사용자는 Obsidian에서 `raw/`에 자료를 투입하고, `wiki/`는 주로 조회용으로 사용한다.
+- `.obsidian/` 설정은 git에서 제외된다 (`.gitignore`).
+
 ---
 
 ## 페이지 컨벤션
