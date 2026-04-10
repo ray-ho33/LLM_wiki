@@ -84,10 +84,23 @@ status: active | completed | archived  # project, issue에만 사용
 
 사용자가 `raw/`에 새 문서를 넣고 처리를 요청하면:
 
-1. **파싱**: kordoc CLI 또는 MCP로 문서를 읽는다.
-   - CLI: `kordoc <파일경로>` → 마크다운 출력
-   - MCP: kordoc MCP 도구 사용
-   - 이미지: Read 도구로 직접 열람
+1. **파싱**: 소스 유형에 따라 적절한 도구로 읽는다.
+   - **문서 파일** (HWP, HWPX, PDF, XLSX, DOCX): kordoc CLI 또는 MCP
+     - CLI: `kordoc <파일경로>` → 마크다운 출력
+     - MCP: kordoc MCP 도구 사용
+   - **이미지**: Read 도구로 직접 열람
+   - **X(Twitter) URL**: FxEmbed API로 트윗 데이터 추출
+     - URL에서 `screen_name`과 `status_id` 추출
+     - `https://api.fxtwitter.com/{screen_name}/status/{status_id}` 로 변환
+     - WebFetch로 JSON 가져오기 (tweet.text, tweet.author, 인게이지먼트 등)
+     - 아티클 링크가 있으면 추가 fetch 시도
+   - **YouTube URL**: yt-dlp로 자막·메타데이터 추출
+     - 자막 추출: `yt-dlp --write-auto-sub --sub-lang "ko,en" --skip-download --convert-subs vtt -o "%(title)s" "{URL}"`
+     - 메타데이터: `yt-dlp --dump-json --no-download "{URL}"`
+     - 자막 언어 우선순위: 한국어 수동 > 영어 수동 > 한국어 자동 > 영어 자동
+     - VTT → 순수 텍스트 정제 (타임스탬프·태그 제거, 중복 라인 제거)
+     - yt-dlp가 PATH에 없으면 `python -m yt_dlp`로 대체
+     - Windows: `PYTHONIOENCODING=utf-8` 설정 필요
 2. **사용자와 논의**: 핵심 내용을 요약하고, 어떤 점이 중요한지 사용자와 확인한다.
 3. **소스 요약 페이지 작성**: `wiki/sources/` 에 요약 페이지 생성.
    - 문서 메타정보 (제목, 날짜, 출처, 유형)
@@ -173,6 +186,7 @@ kordoc raw/*.hwpx --out-dir wiki/sources/
 ### 지원 형식
 - HWP, HWPX → 마크다운
 - PDF (텍스트/OCR) → 마크다운
+- PDF (비밀번호 보호) → pikepdf로 해제 후 PyMuPDF로 이미지 렌더링 → Read 도구로 시각적 읽기
 - XLSX → 마크다운 테이블
 - DOCX → 마크다운
 
