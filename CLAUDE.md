@@ -12,7 +12,8 @@ LLM_wiki/
 ├── CLAUDE.md          ← 이 파일. 위키 운영 규칙.
 ├── .mcp.json          ← kordoc MCP 서버 설정
 ├── raw/               ← 원본 소스 (불변, 절대 수정하지 않음)
-│   └── assets/        ← 이미지, 첨부파일
+│   ├── assets/        ← 이미지, 첨부파일
+│   └── done/          ← 파싱 완료된 소스 (ingest 후 이동)
 ├── wiki/              ← LLM이 관리하는 위키 페이지
 │   ├── index.md       ← 전체 페이지 카탈로그
 │   ├── log.md         ← 작업 로그 (시간순)
@@ -30,7 +31,8 @@ LLM_wiki/
 
 ### 핵심 원칙
 
-- `raw/` 는 **읽기 전용**. 절대 수정하지 않는다.
+- `raw/` 는 **읽기 전용**. 원본 파일 내용을 절대 수정하지 않는다.
+- `raw/done/` 은 파싱이 완료된 소스를 옮겨두는 폴더. ingest 완료 후 원본을 이곳으로 이동한다.
 - `wiki/` 는 **LLM이 전적으로 관리**. 페이지 생성, 수정, 삭제 모두 LLM이 한다.
 - `templates/` 는 **읽기 전용**. 양식 원본은 수정하지 않는다.
 - `output/` 는 **LLM이 채운 양식 결과물**을 저장한다.
@@ -96,6 +98,7 @@ status: active | completed | archived  # project, issue에만 사용
 5. **인덱스 갱신**: `wiki/index.md`에 새 페이지들을 등록한다.
 6. **로그 기록**: `wiki/log.md`에 작업 내역을 추가한다.
 7. **overview 갱신**: `wiki/overview.md`의 현황 수치와 최근 활동을 업데이트한다.
+8. **소스 이동**: 파싱이 완료된 원본 파일을 `raw/done/`으로 이동한다.
 
 ### 2. Query (질의)
 
