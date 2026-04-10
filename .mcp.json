@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "kordoc": {
+      "command": "kordoc-mcp"
+    }
+  }
+}
